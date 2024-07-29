@@ -1,0 +1,124 @@
+setup Environment variable
+create app
+start server with morgandev
+connect DB
+create ErrorGenerator with captureStackTrace
+create Error handling for catchAsync
+create global error handler for "dev, prod"
+handle below errors in "prod"
+1) CastError	//id wrong
+2) 11000	//duplicate field
+3) ValidationError
+4) JSONWebTokenError
+5) TokenExpiredError
+///////////Authentication
+create model for User
+create seeding for users
+Password Hashing only for "password create and update"
+Generate JWTtoken with expire time and set it on COOKIE
+create Mail configuration for "sendEmail"
+create user routes and controller
+1) signUp
+create sendToken by "userData, statusCode, res"
+POST only selected fields and "send JWT token"
+2) login
+find user, verify password, send token
+3) logout
+set token null and expire that COOKIE
+4) Forgot Password
+find user and generate reset token 
+hashedResettoken & reset expireing time save on DB
+send url in email
+5) Reset password
+verify the token with reset expire time
+chk the password and confirm password & save on DB
+remove reset token and reset expiration time on DB
+6) Change Password
+find user chk old password
+save new password
+7) Update user profile with profile image
+8) get all users 
+
+create "authenticated and authorized" user middleware
+///////////Tour
+create model for Tour
+create seeding for tours
+create tour routes and controller
+1) create tour with multi images and cover image
+only admin create tour 
+2) get specific tour	"need review also", "dont show secret tours"
+3) get all tours with some features below
+search, filter by fields, sort, limitfields, paginateion
+"need review also"
+"dont show secret tours"
+4) updateing the specific tour with images
+5) delete specific tour
+5) get tour statistics of below points
+by difficyltys but project as upper case gte 4.5 of num of tours, ratings,
+average of price,raiting
+mininimum and maximum price haven.
+need to sor bu average price with 2 decimals
+but no need easy difficulty
+"dont use secret tours for calculation"
+6)sorting the peak month of tour "dont use secret tours for calculation"
+
+/////////Handle securitys
+ratelimit, helmet, mongo sanitize, xss, hpp
+
+///////////Review
+create model for Review
+create seeding for reviews
+create Review routes and controller
+1) create review based on tour "but user shoud submit 1 tour for 1 review" and handle the error also
+calulate average rating, ratings quantity for TOUR
+2) get specific review "need tour -> names, user -> name, photo also"
+3) get all review by tour id
+4) update the review
+calulate average rating, ratings quantity for TOUR
+5) delete the review
+calulate average rating, ratings quantity for TOUR
+
+
+////////////////////////////////////////////
+//////////create model for User///////////// Trim is general
+FIELD			TYPE	REQUIRED UNIQUE DEFAULT MIN MAX SELECT ENUM VALIDATION
+name			str	t			
+email			str	t	 t					chk is email
+photo			str
+role			str			user			admin, user
+password		str	t			8   10   f
+password confirm	str	t				 f		chk with password
+password chage at	date
+password reset token	str
+active			boolean			t		 f
+	
+////////////////////////////////////////////
+//////////tour model for Tour///////////// Trim is general
+FIELD			TYPE	REQUIRED UNIQUE DEFAULT MIN MAX SELECT ENUM VALIDATION
+name			str	t	 t		5   40
+slug			str
+duration		num	t
+max group size		num	t
+difficulty		str	t					easy, midium, difficult
+ratings average		num			4.5	1   5		need as rounded 2 decimal
+ratings quantity	num			0
+price			num	t
+priceDiscount		num						this not > price
+summary			str	t	
+description		str	t
+image cover		str	t
+images			multimple image url
+createdAt		date
+tour start date		date
+secret tours		bool			  f
+guides			ref user
+
+////////////////////////////////////////////
+//////////review model for Review///////////// Trim is general
+FIELD			TYPE	REQUIRED UNIQUE DEFAULT MIN MAX SELECT ENUM VALIDATION
+review			str	t
+rating			num				1   5
+createdAt		date
+tour			refer tour  t
+user			refer user  t
+
